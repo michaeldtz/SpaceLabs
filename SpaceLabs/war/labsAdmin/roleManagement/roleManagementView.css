@@ -1,0 +1,21 @@
+#repoTitle {
+	margin-bottom: 20px;
+}
+
+#groupListArea {
+	float: left;
+	position: relative;
+	padding: 10px;
+	margin: 0 auto;
+	
+	height: 60%;
+	width: 30%;
+	box-sizing: border-box;
+}
+
+#groupDetailsArea{
+	padding: 20px;
+	float: left;
+	width: 50%;
+	height: 60%;
+}

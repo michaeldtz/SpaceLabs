@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Space Labs Beta</title>
+
+
+<link href="resources/styles/all.css" rel="stylesheet" type="text/css"	media="all" />
+<link href="resources/styles/uicontrols.css" rel="stylesheet" type="text/css"	media="all" />
+<link href="resources/jslibs/styles/flexslider.css" rel="stylesheet" type="text/css"	media="all" />
+<link href="resources/jslibs/styles/jquery.contextmenu.css" rel="stylesheet" type="text/css"	media="all" />
+
+
+<script type="text/javascript" src="resources/jslibs/jquery-1.7.2.js"></script> 
+<script type="text/javascript" src="resources/jslibs/jquery.base64.min.js"></script>
+<script type="text/javascript" src="resources/jslibs/autosizr.js"></script>
+<script type="text/javascript" src="resources/jslibs/jquery.flexslider.js"></script>
+<script type="text/javascript" src="resources/jslibs/jquery.blockui.js"></script>
+<script type="text/javascript" src="resources/jslibs/jquery.contextmenu.js"></script>
+<script  type="text/javascript" src="resources/jslibs/ace/ace.js"charset="utf-8"></script>
+
+<script type="text/javascript" src="resources/scripts/core/core.js"></script>
+<script type="text/javascript" src="resources/scripts/utils/utils.js"></script>
+<script type="text/javascript" src="resources/scripts/ui/ui.js"></script>
+<script type="text/javascript" src="resources/scripts/core/ajax.js"></script>
+<script type="text/javascript" src="resources/scripts/ui/ui.mvc.js"></script>
+<script type="text/javascript" src="resources/scripts/ui/ui.navi.js"></script>
+
+
+<script type="text/javascript" src="resources/scripts/ui/controls/abstract.js"></script>
+<script type="text/javascript" src="resources/scripts/ui/controls/List.js"></script>
+<script type="text/javascript" src="resources/scripts/ui/controls/CodeEditor.js"></script>
+<script type="text/javascript" src="resources/scripts/ui/controls/AceCodeEditor.js"></script>
+<script type="text/javascript" src="resources/scripts/ui/controls/DropUpload.js"></script>
+
+<script type ="text/javascript">
+$(document).ready(function() {
+	
+	var loggedIn = false;
+	
+	//Initially hide
+	$("#loadingIndicator").hide();
+	
+	//Register the message area provider
+	ui.messageArea.registerUIProvider({
+		showMessage : function(type, text, category){
+			$("#message").removeAttr("class");
+			
+			if(type == "E")
+				$("#message").addClass("error");
+			else if(type == "E")
+				$("#message").addClass("warn");
+			else if(type == "S")
+				$("#message").addClass("success");
+			
+			$("#message").text(text);
+		}
+	});
+	
+	//Init navigation
+	ui.navi.initialize("#contentArea");
+	ui.navi.registerTarget_Viewname("main",  			"labsPublic/overview/intro", 						{ urlTarget : true });
+	ui.navi.registerTarget_Viewname("upload",  			"labsPublic/uploadtest/intro", 						{ urlTarget : true });
+	ui.navi.registerTarget_Viewname("login",  			"labsPublic/login/login");
+	ui.navi.registerTarget_Viewname("logout", 			"labsPublic/login/logout");
+	
+	ui.navi.registerTarget_Viewname("projectList",		"labsUser/repository/projectList",					{ urlTarget : true });
+	ui.navi.registerTarget_Viewname("oldrepository",  	"labsUser/repository/repoEditor/repository", 		{ urlTarget : true });
+	ui.navi.registerTarget_Viewname("repository",  		"labsUser/repository/ideEditor/ideMaster", 			{ urlTarget : true });
+	ui.navi.registerTarget_Viewname("projectDetails",  	"labsUser/repository/repoEditor/projectDetailsView", 	{ urlTarget : true });
+	ui.navi.registerTarget_Viewname("dataviewer",  		"labsUser/repository/dataviewer/etdData",	     	{ urlTarget : true });
+	ui.navi.registerTarget_Viewname("reqInvitation", 	"labsPublic/invitation/reqInvite", 					{ urlTarget : true });
+	
+	ui.navi.registerTarget_Viewname("adminArea",  		"labsAdmin/adminNavi/admin", 						{ urlTarget : true });
+	ui.navi.registerTarget_Viewname("roleMgmt",			"labsAdmin/roleManagement/roleManagement", 			{ urlTarget : true });
+	ui.navi.registerTarget_Viewname("invitations",	 	"labsAdmin/roleManagement/invitationManagement",	{ urlTarget : true });
+	ui.navi.registerTarget_Viewname("coreProjectList",	"labsAdmin/repository/projectList",				{ urlTarget : true });
+	
+	
+	
+	ui.sizing.autoResizeContentArea($("#contentArea"));
+	
+	$("#bloglink").click(function(){
+		window.location = "http://michael-dtz.tumblr.com";
+	});
+	
+	//Handle Login Status	
+	//$("#loginInfo").text("not logged in");
+	ajax.get("papi/session/isLoggedIn", function(result) {
+		loggedIn = result.loggedIn;
+		if(loggedIn == true){
+			$("#loginInfo").text(" logout");
+		} else {			
+			$("#loginInfo").text("not logged in");
+		}
+		
+		ui.mvc.loadViewController("labsPublic/naviArea/navigationArea", $("#menuArea"), function(viewController){
+			viewController.renderNavigationArea(result);
+		});
+		
+		
+	
+	});
+	
+	$("#mainTitle").click(function(){
+		ui.navi.navigateToTarget("main");
+	});
+	
+	//Register Clicks on Login infos
+	$("#loginInfo").click(function(){		
+		if(loggedIn == false){
+			ui.mvc.loadViewControllerAndStyle("labsPublic/login/login", function(result){
+				
+				var container = $("<div style='cursor: pointer; margin:10px;'></div>");
+				result.placeAt(container);
+				 $.blockUI({ message: container });
+				 $('.blockOverlay').attr('title','Click to unblock').click($.unblockUI); 
+			});
+			//ui.navi.navigateToTarget("login");		
+		} else {
+			ui.mvc.loadViewControllerAndStyle("labsPublic/login/logout", function(result){
+				
+				var container = $("<div style='cursor: pointer; margin:10px;'></div>");
+				result.placeAt(container);
+				 $.blockUI({ message: container });
+				 $('.blockOverlay').attr('title','Click to unblock').click($.unblockUI); 
+			});
+			//ui.navi.navigateToTarget("logout");		
+		}
+	});
+	
+	ui.navi.handleStartupNavigation();
+	
+});
+
+</script>
+</head>
+<body>
+	<div id='navigationArea'>
+		<div id='navigationAreaInner'>
+			<div id='titleAndLogin'>
+				<span id='mainTitle' class='titleBold link' style="padding-left:20px;"> Space Labs </span> | 
+				<span id='loginInfo' class='title link'></span>
+				<img src="resources/images/beta.png" style="position: fixed; left: 0px; top: 0px;" />
+			</div>
+			<div id='loadingWrapper'>
+				<img id='loadingIndicator' src='resources/images/spinner.gif' />
+			</div>
+			<div id='message'></div>
+			
+			<div id='menuArea'>
+			</div>
+		</div>
+	</div>
+
+	<div id='headerSpacer'></div>
+	<div id='contentArea' style='min-height:90%;'></div>
+
+	<!-- 
+		<div id='footerArea' class='footerText'>
+		<div class='footerContent'>
+		SpaceLabs is developed by Michael Dietz | 
+		<span class='link' id='bloglink'>My Blog</span> | 
+		<span class='link' id='privacyLink'>Privacy</span>
+		</div>
+	</div>
+
+ 	-->
+</body>
+</html>

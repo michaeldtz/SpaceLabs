@@ -1,0 +1,19 @@
+
+#adminFunctions > li {
+	width: 100px;
+	height: 100px;
+	
+	margin: 10px;
+	padding: 10px;
+	
+	background-color: rgba(70,70,70,0.5);
+	float: left;
+	
+	text-align: center;
+}
+
+#adminFunctions > li:hover {
+	background-color: steelblue;
+	color: white;
+}
+

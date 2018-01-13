@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+
+	<context-param>     
+	  <param-name>EmailSender</param-name>     
+	  <param-value>michael.dtz@gmail.com</param-value>     
+	 </context-param>
+ 
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+  
+	<servlet>
+		<servlet-name>RepositoryServlet</servlet-name>
+		<servlet-class>com.md.spacelabs.repository.RepositoryServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RepositoryServlet</servlet-name>
+		<url-pattern>/repo/*</url-pattern>
+	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>DynamicExecutionServlet</servlet-name>
+		<servlet-class>com.md.spacelabs.dex.DynamicExecutionServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DynamicExecutionServlet</servlet-name>
+		<url-pattern>/dex/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>SpaceLabsRunServlet</servlet-name>
+		<servlet-class>com.md.spacelabs.labs.SpaceLabsRunServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SpaceLabsRunServlet</servlet-name>
+		<url-pattern>/labs/run/*</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+		<servlet-name>PublicAPI</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>com.md.spacelabs.api.publik</param-value>
+			<param-name>com.sun.jersey.config.feature.DisableWADL</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PublicAPI</servlet-name>
+		<url-pattern>/papi/*</url-pattern>
+	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>UserAPI</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>com.md.spacelabs.api.user</param-value>
+			<param-name>com.sun.jersey.config.feature.DisableWADL</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UserAPI</servlet-name>
+		<url-pattern>/uapi/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>AdminAPI</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>com.md.spacelabs.api.admin</param-value>
+			<param-name>com.sun.jersey.config.feature.DisableWADL</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdminAPI</servlet-name>
+		<url-pattern>/aapi/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>SystemServiceServlet</servlet-name>
+		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+		<init-param>
+			<param-name>services</param-name>
+			<param-value/>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SystemServiceServlet</servlet-name>
+		<url-pattern>/_ah/spi/*</url-pattern>
+	</servlet-mapping>
+
+
+	<filter>
+ 		<filter-name>AuthorizationFilter</filter-name>
+ 		<filter-class>com.md.spacelabs.security.SecurityFilter</filter-class>
+ 	</filter>
+ 
+	 <filter-mapping>
+	     <filter-name>AuthorizationFilter</filter-name>
+	     <url-pattern>*</url-pattern>
+	</filter-mapping>
+	
+	
+	
+	<security-constraint>
+		<web-resource-collection>
+			<url-pattern>/labsUser/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>*</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<security-constraint>
+		<web-resource-collection>
+			<url-pattern>/labsAdmin/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint>
+
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
+
+</web-app>

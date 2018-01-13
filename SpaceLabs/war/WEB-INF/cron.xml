@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+<cron>
+<url>/papi/cron/morningservice</url>
+<description>Morning Service</description>
+<schedule>every day 06:45</schedule>
+</cron>
+<cron>
+<url>/papi/cron/everyFifteenMinutes</url>
+<description>Every 15 Minutes</description>
+<schedule>every 15 minutes</schedule>
+</cron>
+<cron>
+<url>/papi/cron/everyHour</url>
+<description>Every Hour</description>
+<schedule>every 1 hours</schedule>
+</cron>
+</cronentries>
